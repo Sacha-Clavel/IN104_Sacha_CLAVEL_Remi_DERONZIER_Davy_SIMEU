@@ -14,13 +14,13 @@ def main() :
 
     # Affichages divers (logo, titre de la fenêtre ...)
 
-    logo = pygame.image.load("Images/pacman.png")
+    logo = pygame.image.load("images/pacman.png")
     pygame.display.set_icon(logo)
-    pygame.display.set_caption("Images/Pacman")
+    pygame.display.set_caption("Pacman")
 
     # Creation de l'image Dot (Point pour mesurer la largeur des murs)
 
-    Dot = pygame.image.load("Images/Dot.png")
+        #Dot = pygame.image.load("Images/Dot.png")
 
     # Largeur et hauteur de la fenêtre
 
@@ -30,25 +30,28 @@ def main() :
     # Création de la fenêtre et initialisation du fond (La carte de pacman)
 
     screen = pygame.display.set_mode((screen_width,screen_height))
-    Map_Px = pygame.image.load("Images/map.png")
-    Map = pygame.transform.scale(Map_Px,[screen_width,screen_height]) #Ajustement de l'image de fond
-    screen.blit(Map, [0,0])
-    pygame.display.set_mode((screen_width,screen_height))
+    map_org = pygame.image.load("images/map.png")
+    map = pygame.transform.scale(map_org,[screen_width,screen_height]) #Ajustement de l'image de fond
+    screen.blit(map, [0,0])
 
     # Initialisation du pacman et création des diverses formes de bouche du pacman
     # La matrice Pacmans contient toutes les formes du bouches du pacman toutes tournées à 0,90,180,270 degrés
 
-    Pacman_Size=32
+    pacman_size = 32
 
-    Pacmans = []
+
+
+    pacmans = []
+
     for i in range(0,360,90):
-        Pacman_ligne = []
+        pacman_ligne = []
+
         for j in range(8):
-            Pacman_Px = pygame.image.load("Images/pacman"+str(j)+".png")
-            Pacman = pygame.transform.scale(Pacman_Px,[Pacman_Size,Pacman_Size])
-            Pacman_rotated = pygame.transform.rotate(Pacman,i)
-            Pacman_ligne.append(Pacman_rotated)
-        Pacmans.append(Pacman_ligne)
+            pacman_org = pygame.image.load("images/pacman"+str(j)+".png")
+            pacman = pygame.transform.scale(pacman_org,[pacman_size,pacman_size])
+            pacman_rotated = pygame.transform.rotate(pacman,i)
+            pacman_ligne.append(pacman_rotated)
+        pacmans.append(pacman_ligne)
 
     i_Pacmans=0
     j_Pacmans=0
@@ -64,15 +67,17 @@ def main() :
 
     # Paramètre de positons et de vitesse
 
-    xpos = 50
-    ypos = 50
+    indice_pos_y = 20
+    indice_pos_x = 11
+
+    xpos = 0
+    ypos = 0
 
     step = 3
 
     step_x = step
     step_y = 0
 
-    epsilon = 15
 
     Score = 0
 
@@ -96,7 +101,7 @@ def main() :
                     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
                     [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
                     [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
-                    [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+                    [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
                     [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
                     [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
                     [0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
@@ -125,7 +130,7 @@ def main() :
     Pacman = Pacmans[i_Pacmans][j_Pacmans]
     screen.blit(Pacman,[xpos,ypos])
 
-    screen.blit(Map, [0,0])
+    screen.blit(map, [0,0])
 
     for i in range(len(Mat_Map)) :
 
