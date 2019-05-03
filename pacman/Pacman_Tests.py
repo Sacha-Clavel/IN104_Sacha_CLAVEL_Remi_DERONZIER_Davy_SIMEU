@@ -13,13 +13,13 @@ def main():
 
     # Affichage divers (logo, titre de la fenêtre ...)
 
-    logo = pygame.image.load("pacman.png")
+    logo = pygame.image.load("images/pacman.png")
     pygame.display.set_icon(logo)
     pygame.display.set_caption("Pacman")
 
     # Creation de l'image Dot (Point pour mesurer la largeur des murs)
 
-    Dot = pygame.image.load("Dot.png")
+    Dot = pygame.image.load("images/Dot.png")
 
     # Largeur et hauteur de la fenêtre
 
@@ -29,7 +29,7 @@ def main():
     # Création de la fenêtre et initialisation du fond (La carte de pacman)
 
     screen = pygame.display.set_mode((screen_width,screen_height))
-    Map_420px = pygame.image.load("map.png")
+    Map_420px = pygame.image.load("images/map.png")
     Map = pygame.transform.scale(Map_420px,[screen_width,screen_height]) #Ajustement de l'image de fond
     screen.blit(Map, [0,0])
     pygame.display.set_mode((screen_width,screen_height))
@@ -43,7 +43,7 @@ def main():
     for i in range(0,360,90):
         Pacman_ligne = []
         for j in range(8):
-            Pacman_1200px = pygame.image.load("pacman"+str(j)+".png")
+            Pacman_1200px = pygame.image.load("images/pacman"+str(j)+".png")
             Pacman = pygame.transform.scale(Pacman_1200px,[Pacman_Size,Pacman_Size])
             Pacman_rotated = pygame.transform.rotate(Pacman,i)
             Pacman_ligne.append(Pacman_rotated)
@@ -61,7 +61,7 @@ def main():
 
     Seed_Size = 10
 
-    Seed_Px = pygame.image.load("seed.png")
+    Seed_Px = pygame.image.load("images/seed.png")
     Seed = pygame.transform.scale(Seed_Px,[Seed_Size,Seed_Size])
 
     xseed = rd.randint(10,screen_width-10)
@@ -138,22 +138,22 @@ def main():
 
             if event.type == pygame.KEYDOWN :
 
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT:
                     step_x = -step  # Exemple : on va vers la gauche si a est pressé
                     step_y = 0
                     i=2             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 180 degrés
 
-                if event.key == pygame.K_d :
+                if event.key == pygame.K_RIGHT :
                     step_x = step
                     step_y = 0
                     i=0             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 0 degrés
 
-                if event.key == pygame.K_w :
+                if event.key == pygame.K_UP :
                     step_x = 0
                     step_y = -step
                     i=1             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 90 degrés
 
-                if event.key == pygame.K_s :
+                if event.key == pygame.K_DOWN :
                     step_x = 0
                     step_y = step
                     i=3
