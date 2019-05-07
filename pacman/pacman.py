@@ -13,7 +13,7 @@ def main() :
 
     # Affichages divers (logo, titre de la fenêtre ...)
 
-    logo = pygame.image.load("images/pacman.png")
+    logo = pygame.image.load("images/pacman10.png")
     pygame.display.set_icon(logo)
     pygame.display.set_caption("Pacman")
 
@@ -59,8 +59,8 @@ def main() :
 
     seed_size = 10
 
-    seed_px = pygame.image.load("Images/seed.png")
-    seed = pygame.transform.scale(seed_px,[seed_size,seed_size])
+    #seed_px = pygame.image.load("Images/seed.png")
+    #seed = pygame.transform.scale(seed_px,[seed_size,seed_size])
 
 
     # Creation de la matrice représentant la carte et de la matrice des positions de chaque case matrice
@@ -153,7 +153,7 @@ def main() :
                 x_seed = tab_pos[i][j][1]
                 y_seed = tab_pos[i][j][0]
 
-                screen.blit(seed, (x_seed,y_seed))
+                #screen.blit(seed, (x_seed,y_seed))
 
 
 
@@ -331,7 +331,7 @@ def main() :
                             x_seed = tab_pos[i][j][1]
                             y_seed = tab_pos[i][j][0]
 
-                            screen.blit(seed, (x_seed,y_seed))
+                            #screen.blit(seed, (x_seed,y_seed))
 
                 if step_x != 0 :
 
@@ -446,7 +446,7 @@ def main() :
                     x_seed = tab_pos[i][j][1]
                     y_seed = tab_pos[i][j][0]
 
-                screen.blit(seed, (x_seed,y_seed))
+                #screen.blit(seed, (x_seed,y_seed))
 
 
 
