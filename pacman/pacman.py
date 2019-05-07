@@ -111,7 +111,7 @@ def main() :
     indice_pos_y = 20
     indice_pos_x = 11
 
-    offset_pacman_x = 10
+    offset_pacman_x = 11
     offset_pacman_y = 11
 
     xpos = tab_pos[indice_pos_y][indice_pos_x][1] - offset_pacman_x
@@ -121,6 +121,7 @@ def main() :
     pos_per_mvmt = epaisseur/step
     num_pos = 0
 
+    current_mvmt = "LEFT"
     next_mvmt_choosed = True
     next_mvmt = "LEFT"
 
@@ -142,7 +143,6 @@ def main() :
     screen.blit(map, [0,0])
 
     screen.blit(pacman,[xpos,ypos])
-
 
 
     for i in range(len(mat_map)) :
@@ -196,7 +196,7 @@ def main() :
                 i_pacmans = 3
 
             next_mvmt_choosed = False
-            next_mvmt = None
+            #next_mvmt = None
 
         else :
 
@@ -217,6 +217,7 @@ def main() :
                         step_x_mat = -1
                         step_y_mat = 0
                         i_pacmans = 2             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 180 degrés
+                        next_mvmt = "LEFT"
 
                     if event.key == pygame.K_RIGHT :
                         step_x = step
@@ -224,6 +225,7 @@ def main() :
                         step_x_mat = 1
                         step_y_mat = 0
                         i_pacmans = 0             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 0 degrés
+                        next_mvmt = "RIGHT"
 
                     if event.key == pygame.K_UP :
                         step_x = 0
@@ -231,6 +233,7 @@ def main() :
                         step_x_mat = 0
                         step_y_mat = -1
                         i_pacmans = 1             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 90 degrés
+                        next_mvmt = "UP"
 
                     if event.key == pygame.K_DOWN :
                         step_x = 0
@@ -238,9 +241,11 @@ def main() :
                         step_x_mat = 0
                         step_y_mat = 1
                         i_pacmans = 3
+                        next_mvmt = "DOWN"
 
         next_indice_pos_y = indice_pos_y + step_y_mat
         next_indice_pos_x = indice_pos_x + step_x_mat
+
 
         if xpos > screen_width or next_indice_pos_x >= largeur :
             xpos = -pacman_size
@@ -258,11 +263,48 @@ def main() :
             ypos = screen_height
             next_indice_pos_y = hauteur-1
 
+
+        if current_mvmt != next_mvmt and mat_map[next_indice_pos_y][next_indice_pos_x] == -1 :
+
+            if current_mvmt == "LEFT":
+                step_x = -step
+                step_y = 0
+                step_x_mat = -1
+                step_y_mat = 0
+                i_pacmans = 2
+
+            if current_mvmt == "RIGHT":
+                step_x = step
+                step_y = 0
+                step_x_mat = 1
+                step_y_mat = 0
+                i_pacmans = 0
+
+            if current_mvmt == "UP":
+                step_x = 0
+                step_y = -step
+                step_x_mat = 0
+                step_y_mat = -1
+                i_pacmans = 1
+
+            if current_mvmt == "DOWN":
+                step_x = 0
+                step_y = step
+                step_x_mat = 0
+                step_y_mat = 1
+                i_pacmans = 3
+
+            next_indice_pos_y = indice_pos_y + step_y_mat
+            next_indice_pos_x = indice_pos_x + step_x_mat
+            next_mvmt = current_mvmt
+
         if mat_map[next_indice_pos_y][next_indice_pos_x] >= 0 :
 
             num_pos += step_x_mat + step_y_mat
             xpos += step_x
             ypos += step_y
+            current_mvmt = next_mvmt
+
 
             while 0 < abs(num_pos) and abs(num_pos) < pos_per_mvmt :
 
@@ -290,7 +332,7 @@ def main() :
                             x_seed = tab_pos[i][j][1]
                             y_seed = tab_pos[i][j][0]
 
-                        screen.blit(seed, (x_seed,y_seed))
+                            screen.blit(seed, (x_seed,y_seed))
 
                 if step_x != 0 :
 
@@ -299,7 +341,7 @@ def main() :
                         # Condition de sortie
 
                         if event.type == pygame.QUIT:
-                            running = False
+                                running = False
 
                         # Déplacements du pacman en fonction des entrées claviers
 
@@ -311,6 +353,7 @@ def main() :
                                 step_x_mat = -1
                                 step_y_mat = 0
                                 i_pacmans = 2             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 180 degrés
+                                current_mvmt = "LEFT"
 
                             if event.key == pygame.K_RIGHT :
                                 step_x = step
@@ -318,14 +361,15 @@ def main() :
                                 step_x_mat = 1
                                 step_y_mat = 0
                                 i_pacmans = 0             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 0 degrés
+                                current_mvmt = "RIGHT"
 
                             if event.key == pygame.K_UP :
                                 next_mvmt_choosed = True
-                                nect_mvmt = "UP"
+                                next_mvmt = "UP"
 
                             if event.key == pygame.K_DOWN :
                                 next_mvmt_choosed = True
-                                nect_mvmt = "DOWN"
+                                next_mvmt = "DOWN"
 
 
                 if step_y != 0 :
@@ -347,7 +391,7 @@ def main() :
 
                             if event.key == pygame.K_RIGHT :
                                 next_mvmt_choosed = True
-                                nect_mvmt = "RIGHT"
+                                next_mvmt = "RIGHT"
 
                             if event.key == pygame.K_UP :
                                 step_x = 0
@@ -355,6 +399,7 @@ def main() :
                                 step_x_mat = 0
                                 step_y_mat = -1
                                 i_pacmans = 1             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 90 degrés
+                                current_mvmt = "UP"
 
                             if event.key == pygame.K_DOWN :
                                 step_x = 0
@@ -362,27 +407,24 @@ def main() :
                                 step_x_mat = 0
                                 step_y_mat = 1
                                 i_pacmans = 3
-
+                                current_mvmt = "DOWN"
 
                 xpos += step_x
                 ypos += step_y
                 num_pos += step_x_mat +step_y_mat
 
 
+            if num_pos != 0 :
 
+                indice_pos_x = next_indice_pos_x
+                indice_pos_y = next_indice_pos_y
 
+                if mat_map[next_indice_pos_y][next_indice_pos_x] != 0 :
 
-        if num_pos != 0 :
+                    mat_map[next_indice_pos_y][next_indice_pos_x] = mat_map[next_indice_pos_y][next_indice_pos_x]*0
+                    score += 1
 
-            indice_pos_x = next_indice_pos_x
-            indice_pos_y = next_indice_pos_y
-
-            if mat_map[next_indice_pos_y][next_indice_pos_x] != 0 :
-
-                mat_map[next_indice_pos_y][next_indice_pos_x] = mat_map[next_indice_pos_y][next_indice_pos_x]*0
-                score += 1
-                
-            num_pos = 0
+                num_pos = 0
 
         pacman = pacmans[i_pacmans][j_pacmans]
         screen.blit(pacman,[xpos,ypos])
