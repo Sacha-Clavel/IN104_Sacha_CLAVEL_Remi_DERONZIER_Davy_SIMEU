@@ -1,6 +1,5 @@
 import pygame
 import random as rd
-import numpy as np
 import time
 
 # Taille matrice carte : 27x23
