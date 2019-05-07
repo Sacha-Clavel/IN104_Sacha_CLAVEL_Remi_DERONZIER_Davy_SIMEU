@@ -1,9 +1,8 @@
 import pygame
 import random as rd
-
+import utilities
 
 # Taille matrice carte : 27x23
-
 
 
 def main() :
@@ -120,9 +119,9 @@ def main() :
     pos_per_mvmt = epaisseur/step
     num_pos = 0
 
-    current_mvmt = "LEFT"
+    current_mvmt = "left"
     next_mvmt_choosed = True
-    next_mvmt = "LEFT"
+    next_mvmt = "left"
 
     step_x = step
     step_y = 0
@@ -165,39 +164,12 @@ def main() :
         j_pacmans = j_pacmans%8
 
         if next_mvmt_choosed :
-
-            if next_mvmt == "LEFT":
-                step_x = -step
-                step_y = 0
-                step_x_mat = -1
-                step_y_mat = 0
-                i_pacmans = 2
-
-            if next_mvmt == "RIGHT":
-                step_x = step
-                step_y = 0
-                step_x_mat = 1
-                step_y_mat = 0
-                i_pacmans = 0
-
-            if next_mvmt == "UP":
-                step_x = 0
-                step_y = -step
-                step_x_mat = 0
-                step_y_mat = -1
-                i_pacmans = 1
-
-            if next_mvmt == "DOWN":
-                step_x = 0
-                step_y = step
-                step_x_mat = 0
-                step_y_mat = 1
-                i_pacmans = 3
-
             next_mvmt_choosed = False
             #next_mvmt = None
 
         else :
+
+            next_mvmt = current_mvmt
 
             for event in pygame.event.get():
 
@@ -211,36 +183,23 @@ def main() :
                 if event.type == pygame.KEYDOWN :
 
                     if event.key == pygame.K_LEFT:
-                        step_x = -step     # Exemple : on va vers la gauche si a est pressé
-                        step_y = 0
-                        step_x_mat = -1
-                        step_y_mat = 0
-                        i_pacmans = 2             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 180 degrés
-                        next_mvmt = "LEFT"
+                        next_mvmt = "left"
 
                     if event.key == pygame.K_RIGHT :
-                        step_x = step
-                        step_y = 0
-                        step_x_mat = 1
-                        step_y_mat = 0
-                        i_pacmans = 0             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 0 degrés
-                        next_mvmt = "RIGHT"
+                        next_mvmt = "right"
 
                     if event.key == pygame.K_UP :
-                        step_x = 0
-                        step_y = -step
-                        step_x_mat = 0
-                        step_y_mat = -1
-                        i_pacmans = 1             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 90 degrés
-                        next_mvmt = "UP"
+                        next_mvmt = "up"
 
                     if event.key == pygame.K_DOWN :
-                        step_x = 0
-                        step_y = step
-                        step_x_mat = 0
-                        step_y_mat = 1
-                        i_pacmans = 3
-                        next_mvmt = "DOWN"
+                        next_mvmt = "down"
+
+        mvmt_charracteristics = utilities.mvmt_init(next_mvmt)
+        step_x_mat = mvmt_charracteristics["step_x_mat"]
+        step_y_mat = mvmt_charracteristics["step_y_mat"]
+        step_x = step_x_mat * step
+        step_y = step_y_mat * step
+        i_pacmans = mvmt_charracteristics["i_pacmans"]
 
         next_indice_pos_y = indice_pos_y + step_y_mat
         next_indice_pos_x = indice_pos_x + step_x_mat
@@ -265,37 +224,18 @@ def main() :
 
         if current_mvmt != next_mvmt and mat_map[next_indice_pos_y][next_indice_pos_x] == -1 :
 
-            if current_mvmt == "LEFT":
-                step_x = -step
-                step_y = 0
-                step_x_mat = -1
-                step_y_mat = 0
-                i_pacmans = 2
+            next_mvmt = current_mvmt
 
-            if current_mvmt == "RIGHT":
-                step_x = step
-                step_y = 0
-                step_x_mat = 1
-                step_y_mat = 0
-                i_pacmans = 0
-
-            if current_mvmt == "UP":
-                step_x = 0
-                step_y = -step
-                step_x_mat = 0
-                step_y_mat = -1
-                i_pacmans = 1
-
-            if current_mvmt == "DOWN":
-                step_x = 0
-                step_y = step
-                step_x_mat = 0
-                step_y_mat = 1
-                i_pacmans = 3
+            mvmt_charracteristics = utilities.mvmt_init(next_mvmt)
+            step_x_mat = mvmt_charracteristics["step_x_mat"]
+            step_y_mat = mvmt_charracteristics["step_y_mat"]
+            step_x = step_x_mat * step
+            step_y = step_y_mat * step
+            i_pacmans = mvmt_charracteristics["i_pacmans"]
 
             next_indice_pos_y = indice_pos_y + step_y_mat
             next_indice_pos_x = indice_pos_x + step_x_mat
-            next_mvmt = current_mvmt
+
 
         if mat_map[next_indice_pos_y][next_indice_pos_x] >= 0 :
 
@@ -347,28 +287,18 @@ def main() :
                         if event.type == pygame.KEYDOWN :
 
                             if event.key == pygame.K_LEFT:
-                                step_x = -step     # Exemple : on va vers la gauche si a est pressé
-                                step_y = 0
-                                step_x_mat = -1
-                                step_y_mat = 0
-                                i_pacmans = 2             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 180 degrés
-                                current_mvmt = "LEFT"
+                                current_mvmt = "left"
 
                             if event.key == pygame.K_RIGHT :
-                                step_x = step
-                                step_y = 0
-                                step_x_mat = 1
-                                step_y_mat = 0
-                                i_pacmans = 0             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 0 degrés
-                                current_mvmt = "RIGHT"
+                                current_mvmt = "right"
 
                             if event.key == pygame.K_UP :
                                 next_mvmt_choosed = True
-                                next_mvmt = "UP"
+                                next_mvmt = "up"
 
                             if event.key == pygame.K_DOWN :
                                 next_mvmt_choosed = True
-                                next_mvmt = "DOWN"
+                                next_mvmt = "down"
 
 
                 if step_y != 0 :
@@ -386,31 +316,30 @@ def main() :
 
                             if event.key == pygame.K_LEFT:
                                 next_mvmt_choosed = True
-                                next_mvmt = "LEFT"
+                                next_mvmt = "left"
 
                             if event.key == pygame.K_RIGHT :
                                 next_mvmt_choosed = True
-                                next_mvmt = "RIGHT"
+                                next_mvmt = "right"
 
                             if event.key == pygame.K_UP :
-                                step_x = 0
-                                step_y = -step
-                                step_x_mat = 0
-                                step_y_mat = -1
-                                i_pacmans = 1             # i=2 est la ligne de Pacmans correspondant à la tête de Pacman tournées à 90 degrés
-                                current_mvmt = "UP"
+                                current_mvmt = "up"
+
 
                             if event.key == pygame.K_DOWN :
-                                step_x = 0
-                                step_y = step
-                                step_x_mat = 0
-                                step_y_mat = 1
-                                i_pacmans = 3
-                                current_mvmt = "DOWN"
+                                current_mvmt = "down"
+
+
+                mvmt_charracteristics = utilities.mvmt_init(current_mvmt)
+                step_x_mat = mvmt_charracteristics["step_x_mat"]
+                step_y_mat = mvmt_charracteristics["step_y_mat"]
+                step_x = step_x_mat * step
+                step_y = step_y_mat * step
+                i_pacmans = mvmt_charracteristics["i_pacmans"]
 
                 xpos += step_x
                 ypos += step_y
-                num_pos += step_x_mat +step_y_mat
+                num_pos += step_x_mat + step_y_mat
 
 
             if num_pos != 0 :
