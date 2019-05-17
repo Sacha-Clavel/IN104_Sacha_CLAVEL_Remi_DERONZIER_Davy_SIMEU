@@ -106,8 +106,8 @@ class Charracter :
 
     def move(self):
         global STEP
-        self.pos_x += self.step_i * STEP
-        self.pos_y += self.step_j * STEP
+        self.pos_x += self.step_j * STEP
+        self.pos_y += self.step_i * STEP
 
 
 
