@@ -311,7 +311,6 @@ def main() :
 
             while 0 < abs(player.n_pos) and abs(player.n_pos) < pos_per_mvmt :
 
-
                 player.draw(screen)
                 shadow.draw(screen)
 

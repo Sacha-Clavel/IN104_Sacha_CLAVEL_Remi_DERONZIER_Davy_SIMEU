@@ -138,8 +138,8 @@ class pacman(Charracter) :
     def potential_update_of_indexes(self):
         global pos_per_mvmt
 
-        potential_next_index_i = self.index_i
-        potential_next_index_j = self.index_j
+        potential_next_index_i = self.index_i + self.step_i
+        potential_next_index_j = self.index_j + self.step_j
 
         if abs(self.n_pos) == pos_per_mvmt :
             self.index_i = potential_next_index_i
