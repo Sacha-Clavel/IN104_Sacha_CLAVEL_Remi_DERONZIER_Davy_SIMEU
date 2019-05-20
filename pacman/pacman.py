@@ -17,22 +17,22 @@ def main() :
     pygame.display.set_caption("Pacman")
 
 
-    # Largeur et hauteur de la fenêtre
+    # Larger et hauter de la fenêtre
 
-    screen_width = 606
-    screen_height = 775
+    SCREEN_WIDTH = 606
+    SCREEN_HEIGHT = 775
 
     # Création de la fenêtre et initialisation du fond (La carte de pacman)
 
-    screen = pygame.display.set_mode((screen_width,screen_height))
+    screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     map_org = pygame.image.load("images/map.png")
-    map = pygame.transform.scale(map_org,[screen_width,screen_height])
+    map = pygame.transform.scale(map_org,[SCREEN_WIDTH,SCREEN_HEIGHT])
     screen.blit(map, [0,0])
 
     # Initialisation du pacman et création des diverses formes de bouche du pacman
     # La matrice images_pacman contient toutes les formes du bouches du pacman toutes tournées à 0,90,180,270 degrés
 
-    pacman_size = 32
+    PACMAN_SIZE = 32
 
     images_pacman = []
 
@@ -43,7 +43,7 @@ def main() :
             pacman_org = pygame.image.load("images/pacman"+str(j)+".png")
             pacman_rotated = pygame.transform.rotate(pacman_org,i)
 
-            pacman = pygame.transform.scale(pacman_rotated,[pacman_size,pacman_size])
+            pacman = pygame.transform.scale(pacman_rotated,[PACMAN_SIZE,PACMAN_SIZE])
 
             line_images_pacman.append(pacman)
 
@@ -52,18 +52,18 @@ def main() :
 
     # Creation des images des fantomes
 
-        ghosts_size = 30
+    GHOSTS_SIZE = 31
 
-        image_shadow_px = pygame.image.load("images/shadow.png")
-        image_shadow = pygame.transform.scale(image_shadow_px,[ghosts_size,ghosts_size])
+    image_shadow_px = pygame.image.load("images/shadow.png")
+    image_shadow = pygame.transform.scale(image_shadow_px,[GHOSTS_SIZE,GHOSTS_SIZE])
 
 
     # Création des images des graines
 
-    seed_size = 10
+    SEED_SIZE = 10
 
     seed_px = pygame.image.load("Images/seed.png")
-    seed = pygame.transform.scale(seed_px,[seed_size,seed_size])
+    seed = pygame.transform.scale(seed_px,[SEED_SIZE,SEED_SIZE])
 
 
     # Creation de la matrice représentant la carte et de la matrice regroupant les positions sur l'écran correspondant à chaque case de matrice
@@ -99,18 +99,18 @@ def main() :
 
 
 
-    pos_per_mvmt = 9
+    POS_PER_MVMT = 9
     STEP = 3
-    epaisseur = STEP*pos_per_mvmt
+    THICK = STEP*POS_PER_MVMT
 
 
-    largeur = 23
-    hauteur = 27
+    WIDTH = 23
+    HEIGHT = 27
 
-    offset_x = 1
-    offset_y = 61
+    OFFSET_X = 1
+    OFFSET_Y = 61
 
-    tab_pos = [[[offset_x + i*epaisseur,offset_y + j*epaisseur] for i in range(largeur)] for j in range(hauteur)]
+    mat_pos = [[[OFFSET_X + j*THICK, OFFSET_Y + i*THICK] for j in range(WIDTH)] for i in range(HEIGHT)]
 
     # Methode affichant les graines présentes sur la carte
 
@@ -122,8 +122,8 @@ def main() :
 
                 if mat_map[i][j] == 1 :
 
-                    x_seed = tab_pos[i][j][0]
-                    y_seed = tab_pos[i][j][1]
+                    x_seed = mat_pos[i][j][0]
+                    y_seed = mat_pos[i][j][1]
 
                     screen.blit(seed, (x_seed,y_seed))
 
@@ -134,60 +134,39 @@ def main() :
 
     i_pacmans = 0
 
-    liste_deplacements = ["rightward","upward","leftward","downward"]
+    direction_list = ["rightward","upward","leftward","downward"]
 
     index_i_pacman = 20
     index_j_pacman = 11
 
-    offset_pacman_x = 11
-    offset_pacman_y = 11
+    OFFSET_PACMAN_X = 11
+    OFFSET_PACMAN_Y = 11
 
-    pos_x = tab_pos[index_i_pacman][index_j_pacman][0] - offset_pacman_x
-    pos_y = tab_pos[index_i_pacman][index_j_pacman][1] - offset_pacman_y
+    pos_x = mat_pos[index_i_pacman][index_j_pacman][0] - OFFSET_PACMAN_X
+    pos_y = mat_pos[index_i_pacman][index_j_pacman][1] - OFFSET_PACMAN_Y
 
-    player = utilities.pacman(pos_x,pos_y,index_i_pacman,index_j_pacman,"leftward",0,images_pacman,0)
+    player = utilities.pacman(pos_x,pos_y,index_i_pacman,index_j_pacman,"leftward",0,OFFSET_PACMAN_X,OFFSET_PACMAN_Y,images_pacman,0,None,False)
 
-    index_j_shadow = 1
-    index_i_shadow = 1
+    index_j_shadow = 3
+    index_i_shadow = 12
 
-    offset_fantome_0_x = 10
-    offset_fantome_0_y = 10
+    OFFSET_GHOSTS_X = 7
+    OFFSET_GHOSTS_Y = 11
 
-    pos_x_shadow = tab_pos[index_i_shadow][index_j_shadow][0] - offset_fantome_0_x
-    pos_y_shadow = tab_pos[index_i_shadow][index_j_shadow][1] - offset_fantome_0_y
+    pos_x_shadow = mat_pos[index_i_shadow][index_j_shadow][0] - OFFSET_GHOSTS_X
+    pos_y_shadow = mat_pos[index_i_shadow][index_j_shadow][1] - OFFSET_GHOSTS_Y
 
-    shadow = utilities.ghost(pos_x_shadow,pos_y_shadow,index_i_shadow,index_j_shadow,"rightward",0,"shadow",image_shadow)
+    shadow = utilities.ghost(pos_x_shadow,pos_y_shadow,index_i_shadow,index_j_shadow,"leftward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"shadow",image_shadow)
     #speedy =
     #bashful =
     #pokey =
 
 
-
-    player.direction = "leftward"
-    next_direction_choosed = True
-    next_direction = "leftward"
-
-    step_x_pacman = -STEP
-    step_y_pacman = 0
-    step_x_pacman_mat = -1
-    step_y_pacman_mat = 0
-
-
-    current_mvmt_shadow = liste_deplacements[0] # "rightward"
-
-    step_x_fantome_0 = STEP
-    step_y_fantome_0 = 0
-    step_x_fantome_0_mat = 1
-    step_y_fantome_0_mat = 0
-
-
     score = 0
-
 
 
     # Initialisation de l'affichage
 
-    image_pacman = images_pacman[i_pacmans][player.n_mouth]
 
     screen.blit(map, [0,0])
 
@@ -205,52 +184,54 @@ def main() :
 
         shadow.n_pos += 1
 
-        if shadow.n_pos%pos_per_mvmt == 0 :
+        if shadow.n_pos == POS_PER_MVMT :
 
-            shadow.n_pos=0
+            shadow.potential_update_of_indexes_and_positions()
 
-            shadow.update_indexes()
-
-            case_haut = mat_map[shadow.index_i-1][shadow.index_j]
-            case_droite = mat_map[shadow.index_i][shadow.index_j+1]
-            case_gauche = mat_map[shadow.index_i][shadow.index_j-1]
-            case_bas = mat_map[shadow.index_i+1][shadow.index_j]
+            pos_up = mat_map[(shadow.index_i-1)%HEIGHT][(shadow.index_j)%WIDTH]
+            pos_right = mat_map[(shadow.index_i)%HEIGHT][(shadow.index_j+1)%WIDTH]
+            pos_left = mat_map[(shadow.index_i)%HEIGHT][(shadow.index_j-1)%WIDTH]
+            pos_down = mat_map[(shadow.index_i+1)%HEIGHT][(shadow.index_j)%WIDTH]
 
 
-            if case_haut<0 :
-                liste_deplacements.remove("upward")
+            if pos_up<0 :
+                direction_list.remove("upward")
 
-            if case_droite<0 :
-                liste_deplacements.remove("rightward")
+            if pos_right<0 :
+                direction_list.remove("rightward")
 
-            if case_gauche<0 :
-                liste_deplacements.remove("leftward")
+            if pos_left<0 :
+                direction_list.remove("leftward")
 
-            if case_bas<0 :
-                liste_deplacements.remove("downward")
+            if pos_down<0 :
+                direction_list.remove("downward")
 
-            if len(liste_deplacements)>2 :
 
-                current_mvmt_shadow = liste_deplacements[rd.randint(0,len(liste_deplacements)-1)]
+            current_opposite_direction = utilities.opposite_direction(shadow.direction)
 
-            liste_deplacements = ["rightward","upward","leftward","downward"]
+            if utilities.is_in(current_opposite_direction,direction_list):
+                direction_list.remove(current_opposite_direction)
 
-        shadow.config_mvmt(current_mvmt_shadow)
+            shadow.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+            direction_list = ["rightward","upward","leftward","downward"]
+
+        shadow.config_mvmt(shadow.direction)
         shadow.move()
 
         # 1st Management of player movements
 
-        player.n_pos = 0
         player.n_mouth += 1
         player.n_mouth = player.n_mouth%8
 
 
-        if next_direction_choosed :
-            next_direction_choosed = False
+        precedent_player_direction = player.direction
+
+        if player.next_direction_choosed :
+
+            player.direction = player.next_direction_choice
 
         else :
-
-            next_direction = player.direction
 
             for event in pygame.event.get():
 
@@ -264,70 +245,59 @@ def main() :
                 if event.type == pygame.KEYDOWN :
 
                     if event.key == pygame.K_LEFT:
-                        next_direction = "leftward"
+                        player.direction = "leftward"
 
                     if event.key == pygame.K_RIGHT :
-                        next_direction = "rightward"
+                        player.direction = "rightward"
 
                     if event.key == pygame.K_UP :
-                        next_direction = "upward"
+                        player.direction = "upward"
 
                     if event.key == pygame.K_DOWN :
-                        next_direction = "downward"
+                        player.direction = "downward"
 
 
-        precedent_player_direction = player.direction
-        player.config_mvmt(next_direction)
+        player.config_mvmt(player.direction)
 
-        potential_next_index_i_player, potential_next_index_j_player = player.potential_update_of_indexes()
-
-
-        if potential_next_index_j_player >= largeur :
-            potential_next_index_j_player = 0
-
-        if potential_next_index_j_player < 0 :
-            potential_next_index_j_player = largeur-1
-
-        if potential_next_index_i_player >= hauteur:
-            potential_next_index_i_player = 0
-
-        if potential_next_index_i_player < 0:
-            potential_next_index_i_player = hauteur-1
+        potential_next_index_i_player, potential_next_index_j_player = player.potential_update_of_indexes_and_positions()
 
 
-        if player.direction != precedent_player_direction and mat_map[potential_next_index_i_player][potential_next_index_j_player] == -1 :
+        if mat_map[potential_next_index_i_player][potential_next_index_j_player] == -1 :
 
-            next_direction = precedent_player_direction
-            player.config_mvmt(next_direction)
+            player.direction = precedent_player_direction
+            player.config_mvmt(player.direction)
 
-            potential_next_index_i_player, potential_next_index_j_player = player.potential_update_of_indexes()
+            potential_next_index_i_player, potential_next_index_j_player = player.potential_update_of_indexes_and_positions()
 
 
         if mat_map[potential_next_index_i_player][potential_next_index_j_player] >= 0 :
+
+            if player.direction != precedent_player_direction :
+
+                player.next_direction_choosed = False
 
             player.n_pos += player.step_i + player.step_j
             player.move()
 
 
-            while 0 < abs(player.n_pos) and abs(player.n_pos) < pos_per_mvmt :
+            while 0 < abs(player.n_pos) and abs(player.n_pos) < POS_PER_MVMT :
 
                 player.draw(screen)
                 shadow.draw(screen)
 
                 font=pygame.font.Font(None, 40)
                 text = font.render(str(score),1,(255,255,255))
-                screen.blit(text, (screen_width/2+10,16))
+                screen.blit(text, (SCREEN_WIDTH/2+10,16))
 
                 pygame.display.flip()
 
                 screen.blit(map, (0,0))
                 draw_seed()
 
-                shadow.n_pos += 1
                 player.n_mouth += 1
                 player.n_mouth = player.n_mouth%8
 
-                if player.index_j != 0 :
+                if player.step_i == 0 :
 
                     for event in pygame.event.get():
 
@@ -347,15 +317,16 @@ def main() :
                                 player.direction = "rightward"
 
                             if event.key == pygame.K_UP :
-                                next_direction_choosed = True
-                                next_direction = "upward"
+
+                                player.next_direction_choosed = True
+                                player.next_direction_choice = "upward"
 
                             if event.key == pygame.K_DOWN :
-                                next_direction_choosed = True
-                                next_direction = "downward"
+                                player.next_direction_choosed = True
+                                player.next_direction_choice = "downward"
 
 
-                if player.step_i != 0 :
+                if player.step_j == 0 :
 
                     for event in pygame.event.get():
 
@@ -369,12 +340,12 @@ def main() :
                         if event.type == pygame.KEYDOWN :
 
                             if event.key == pygame.K_LEFT:
-                                next_direction_choosed = True
-                                next_direction = "leftward"
+                                player.next_direction_choosed = True
+                                player.next_direction_choice = "leftward"
 
                             if event.key == pygame.K_RIGHT :
-                                next_direction_choosed = True
-                                next_direction = "rightward"
+                                player.next_direction_choosed = True
+                                player.next_direction_choice = "rightward"
 
                             if event.key == pygame.K_UP :
                                 player.direction = "upward"
@@ -384,60 +355,52 @@ def main() :
 
 
                 player.config_mvmt(player.direction)
-                player.move()
 
+                player.move()
                 player.n_pos += player.step_i + player.step_j
 
 
-                if shadow.n_pos%pos_per_mvmt == 0 :
+                shadow.n_pos += 1
 
-                    shadow.n_pos = 0
-
-                    shadow.update_indexes()
-
-                    case_haut = mat_map[shadow.index_i-1][shadow.index_j]
-                    case_droite = mat_map[shadow.index_i][shadow.index_j+1]
-                    case_gauche = mat_map[shadow.index_i][shadow.index_j-1]
-                    case_bas = mat_map[shadow.index_i+1][shadow.index_j]
+                if shadow.n_pos == POS_PER_MVMT :
 
 
-                    if case_haut<0 :
-                        liste_deplacements.remove("upward")
+                    shadow.potential_update_of_indexes_and_positions()
 
-                    if case_droite<0 :
-                        liste_deplacements.remove("rightward")
+                    pos_up = mat_map[(shadow.index_i-1)%HEIGHT][(shadow.index_j)%WIDTH]
+                    pos_right = mat_map[(shadow.index_i)%HEIGHT][(shadow.index_j+1)%WIDTH]
+                    pos_left = mat_map[(shadow.index_i)%HEIGHT][(shadow.index_j-1)%WIDTH]
+                    pos_down = mat_map[(shadow.index_i+1)%HEIGHT][(shadow.index_j)%WIDTH]
 
-                    if case_gauche<0 :
-                        liste_deplacements.remove("leftward")
 
-                    if case_bas<0 :
-                        liste_deplacements.remove("downward")
+                    if pos_up<0 :
+                        direction_list.remove("upward")
 
-                    if len(liste_deplacements)>2 :
+                    if pos_right<0 :
+                        direction_list.remove("rightward")
 
-                        current_mvmt_shadow = liste_deplacements[rd.randint(0,len(liste_deplacements)-1)]
+                    if pos_left<0 :
+                        direction_list.remove("leftward")
 
-                    liste_deplacements = ["rightward","upward","leftward","downward"]
+                    if pos_down<0 :
+                        direction_list.remove("downward")
 
-                shadow.config_mvmt(current_mvmt_shadow)
+                    current_opposite_direction = utilities.opposite_direction(shadow.direction)
+
+                    if utilities.is_in(current_opposite_direction,direction_list):
+                        direction_list.remove(current_opposite_direction)
+
+
+                    shadow.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+                    direction_list = ["rightward","upward","leftward","downward"]
+
+                shadow.config_mvmt(shadow.direction)
                 shadow.move()
 
 
-            if potential_next_index_j_player >= largeur :
-                player.pos_x = 0 #-pacman_size
+            player.potential_update_of_indexes_and_positions()
 
-            if potential_next_index_j_player < 0 :
-                player.pos_x = screen_widths-1
-
-            if potential_next_index_i_player >= hauteur:
-                player.pos_y = -pacman_sizes
-
-            if potential_next_index_i_player < 0:
-                player.pos_y = screen_heights
-
-
-
-            player.potential_update_of_indexes()
 
             if mat_map[player.index_i][player.index_j] != 0 :
 
@@ -450,7 +413,7 @@ def main() :
 
         font=pygame.font.Font(None, 40)
         text = font.render(str(score),1,(255,255,255))
-        screen.blit(text, (screen_width/2+10,16))
+        screen.blit(text, (SCREEN_WIDTH/2+10,16))
 
         pygame.display.flip()
 
