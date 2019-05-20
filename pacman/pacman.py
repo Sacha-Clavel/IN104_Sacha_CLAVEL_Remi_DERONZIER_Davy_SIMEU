@@ -57,6 +57,15 @@ def main() :
     image_shadow_px = pygame.image.load("images/shadow.png")
     image_shadow = pygame.transform.scale(image_shadow_px,[GHOSTS_SIZE,GHOSTS_SIZE])
 
+    image_speedy_px = pygame.image.load("images/speedy.png")
+    image_speedy = pygame.transform.scale(image_speedy_px,[GHOSTS_SIZE,GHOSTS_SIZE])
+
+    image_pokey_px = pygame.image.load("images/pokey.png")
+    image_pokey = pygame.transform.scale(image_pokey_px,[GHOSTS_SIZE,GHOSTS_SIZE])
+
+    image_bashful_px = pygame.image.load("images/bashful.png")
+    image_bashful = pygame.transform.scale(image_bashful_px,[GHOSTS_SIZE,GHOSTS_SIZE])
+
 
     # Création des images des graines
 
@@ -147,19 +156,49 @@ def main() :
 
     player = utilities.pacman(pos_x,pos_y,index_i_pacman,index_j_pacman,"leftward",0,OFFSET_PACMAN_X,OFFSET_PACMAN_Y,images_pacman,0,None,False)
 
-    index_j_shadow = 3
-    index_i_shadow = 12
+    index_j_shadow = 1
+    index_i_shadow = 1
 
-    OFFSET_GHOSTS_X = 7
+    OFFSET_GHOSTS_X = 10
     OFFSET_GHOSTS_Y = 11
 
     pos_x_shadow = mat_pos[index_i_shadow][index_j_shadow][0] - OFFSET_GHOSTS_X
     pos_y_shadow = mat_pos[index_i_shadow][index_j_shadow][1] - OFFSET_GHOSTS_Y
 
-    shadow = utilities.ghost(pos_x_shadow,pos_y_shadow,index_i_shadow,index_j_shadow,"leftward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"shadow",image_shadow)
-    #speedy =
-    #bashful =
-    #pokey =
+    shadow = utilities.ghost(pos_x_shadow,pos_y_shadow,index_i_shadow,index_j_shadow,"downward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"shadow",image_shadow)
+
+    index_j_speedy = 21
+    index_i_speedy = 1
+
+    OFFSET_GHOSTS_X = 10
+    OFFSET_GHOSTS_Y = 11
+
+    pos_x_speedy = mat_pos[index_i_speedy][index_j_speedy][0] - OFFSET_GHOSTS_X
+    pos_y_speedy = mat_pos[index_i_speedy][index_j_speedy][1] - OFFSET_GHOSTS_Y
+
+    speedy = utilities.ghost(pos_x_speedy,pos_y_speedy,index_i_speedy,index_j_speedy,"leftward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"speedy",image_speedy)
+
+    index_j_bashful = 1
+    index_i_bashful = 25
+
+    OFFSET_GHOSTS_X = 10
+    OFFSET_GHOSTS_Y = 11
+
+    pos_x_bashful = mat_pos[index_i_bashful][index_j_bashful][0] - OFFSET_GHOSTS_X
+    pos_y_bashful = mat_pos[index_i_bashful][index_j_bashful][1] - OFFSET_GHOSTS_Y
+
+    bashful = utilities.ghost(pos_x_bashful,pos_y_bashful,index_i_bashful,index_j_bashful,"rightward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"bashful",image_bashful)
+
+    index_j_pokey = 21
+    index_i_pokey = 25
+
+    OFFSET_GHOSTS_X = 10
+    OFFSET_GHOSTS_Y = 11
+
+    pos_x_pokey = mat_pos[index_i_pokey][index_j_pokey][0] - OFFSET_GHOSTS_X
+    pos_y_pokey = mat_pos[index_i_pokey][index_j_pokey][1] - OFFSET_GHOSTS_Y
+
+    pokey = utilities.ghost(pos_x_pokey,pos_y_pokey,index_i_pokey,index_j_pokey,"upward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"pokey",image_pokey)
 
 
     score = 0
@@ -172,6 +211,9 @@ def main() :
 
     player.draw(screen)
     shadow.draw(screen)
+    pokey.draw(screen)
+    speedy.draw(screen)
+    bashful.draw(screen)
 
 
     draw_seed()
@@ -218,6 +260,117 @@ def main() :
 
         shadow.config_mvmt(shadow.direction)
         shadow.move()
+
+        pokey.n_pos += 1
+
+        if pokey.n_pos == POS_PER_MVMT :
+
+            pokey.potential_update_of_indexes_and_positions()
+
+            pos_up = mat_map[(pokey.index_i-1)%HEIGHT][(pokey.index_j)%WIDTH]
+            pos_right = mat_map[(pokey.index_i)%HEIGHT][(pokey.index_j+1)%WIDTH]
+            pos_left = mat_map[(pokey.index_i)%HEIGHT][(pokey.index_j-1)%WIDTH]
+            pos_down = mat_map[(pokey.index_i+1)%HEIGHT][(pokey.index_j)%WIDTH]
+
+
+            if pos_up<0 :
+                direction_list.remove("upward")
+
+            if pos_right<0 :
+                direction_list.remove("rightward")
+
+            if pos_left<0 :
+                direction_list.remove("leftward")
+
+            if pos_down<0 :
+                direction_list.remove("downward")
+
+
+            current_opposite_direction = utilities.opposite_direction(pokey.direction)
+
+            if utilities.is_in(current_opposite_direction,direction_list):
+                direction_list.remove(current_opposite_direction)
+
+            pokey.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+            direction_list = ["rightward","upward","leftward","downward"]
+
+        pokey.config_mvmt(pokey.direction)
+        pokey.move()
+
+        speedy.n_pos += 1
+
+        if speedy.n_pos == POS_PER_MVMT :
+
+            speedy.potential_update_of_indexes_and_positions()
+
+            pos_up = mat_map[(speedy.index_i-1)%HEIGHT][(speedy.index_j)%WIDTH]
+            pos_right = mat_map[(speedy.index_i)%HEIGHT][(speedy.index_j+1)%WIDTH]
+            pos_left = mat_map[(speedy.index_i)%HEIGHT][(speedy.index_j-1)%WIDTH]
+            pos_down = mat_map[(speedy.index_i+1)%HEIGHT][(speedy.index_j)%WIDTH]
+
+
+            if pos_up<0 :
+                direction_list.remove("upward")
+
+            if pos_right<0 :
+                direction_list.remove("rightward")
+
+            if pos_left<0 :
+                direction_list.remove("leftward")
+
+            if pos_down<0 :
+                direction_list.remove("downward")
+
+
+            current_opposite_direction = utilities.opposite_direction(speedy.direction)
+
+            if utilities.is_in(current_opposite_direction,direction_list):
+                direction_list.remove(current_opposite_direction)
+
+            speedy.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+            direction_list = ["rightward","upward","leftward","downward"]
+
+        speedy.config_mvmt(speedy.direction)
+        speedy.move()
+
+        bashful.n_pos += 1
+
+        if bashful.n_pos == POS_PER_MVMT :
+
+            bashful.potential_update_of_indexes_and_positions()
+
+            pos_up = mat_map[(bashful.index_i-1)%HEIGHT][(bashful.index_j)%WIDTH]
+            pos_right = mat_map[(bashful.index_i)%HEIGHT][(bashful.index_j+1)%WIDTH]
+            pos_left = mat_map[(bashful.index_i)%HEIGHT][(bashful.index_j-1)%WIDTH]
+            pos_down = mat_map[(bashful.index_i+1)%HEIGHT][(bashful.index_j)%WIDTH]
+
+
+            if pos_up<0 :
+                direction_list.remove("upward")
+
+            if pos_right<0 :
+                direction_list.remove("rightward")
+
+            if pos_left<0 :
+                direction_list.remove("leftward")
+
+            if pos_down<0 :
+                direction_list.remove("downward")
+
+
+            current_opposite_direction = utilities.opposite_direction(bashful.direction)
+
+            if utilities.is_in(current_opposite_direction,direction_list):
+                direction_list.remove(current_opposite_direction)
+
+            bashful.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+            direction_list = ["rightward","upward","leftward","downward"]
+
+        bashful.config_mvmt(bashful.direction)
+        bashful.move()
 
         # 1st Management of player movements
 
@@ -284,6 +437,9 @@ def main() :
 
                 player.draw(screen)
                 shadow.draw(screen)
+                pokey.draw(screen)
+                speedy.draw(screen)
+                bashful.draw(screen)
 
                 font=pygame.font.Font(None, 40)
                 text = font.render(str(score),1,(255,255,255))
@@ -398,6 +554,118 @@ def main() :
                 shadow.config_mvmt(shadow.direction)
                 shadow.move()
 
+                pokey.n_pos += 1
+
+                if pokey.n_pos == POS_PER_MVMT :
+
+                    pokey.potential_update_of_indexes_and_positions()
+
+                    pos_up = mat_map[(pokey.index_i-1)%HEIGHT][(pokey.index_j)%WIDTH]
+                    pos_right = mat_map[(pokey.index_i)%HEIGHT][(pokey.index_j+1)%WIDTH]
+                    pos_left = mat_map[(pokey.index_i)%HEIGHT][(pokey.index_j-1)%WIDTH]
+                    pos_down = mat_map[(pokey.index_i+1)%HEIGHT][(pokey.index_j)%WIDTH]
+
+
+                    if pos_up<0 :
+                        direction_list.remove("upward")
+
+                    if pos_right<0 :
+                        direction_list.remove("rightward")
+
+                    if pos_left<0 :
+                        direction_list.remove("leftward")
+
+                    if pos_down<0 :
+                        direction_list.remove("downward")
+
+
+                    current_opposite_direction = utilities.opposite_direction(pokey.direction)
+
+                    if utilities.is_in(current_opposite_direction,direction_list):
+                        direction_list.remove(current_opposite_direction)
+
+                    pokey.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+                    direction_list = ["rightward","upward","leftward","downward"]
+
+                pokey.config_mvmt(pokey.direction)
+                pokey.move()
+
+                speedy.n_pos += 1
+
+                if speedy.n_pos == POS_PER_MVMT :
+
+                    speedy.potential_update_of_indexes_and_positions()
+
+                    pos_up = mat_map[(speedy.index_i-1)%HEIGHT][(speedy.index_j)%WIDTH]
+                    pos_right = mat_map[(speedy.index_i)%HEIGHT][(speedy.index_j+1)%WIDTH]
+                    pos_left = mat_map[(speedy.index_i)%HEIGHT][(speedy.index_j-1)%WIDTH]
+                    pos_down = mat_map[(speedy.index_i+1)%HEIGHT][(speedy.index_j)%WIDTH]
+
+
+                    if pos_up<0 :
+                        direction_list.remove("upward")
+
+                    if pos_right<0 :
+                        direction_list.remove("rightward")
+
+                    if pos_left<0 :
+                        direction_list.remove("leftward")
+
+                    if pos_down<0 :
+                        direction_list.remove("downward")
+
+
+                    current_opposite_direction = utilities.opposite_direction(speedy.direction)
+
+                    if utilities.is_in(current_opposite_direction,direction_list):
+                        direction_list.remove(current_opposite_direction)
+
+                    speedy.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+                    direction_list = ["rightward","upward","leftward","downward"]
+
+                speedy.config_mvmt(speedy.direction)
+                speedy.move()
+
+
+                bashful.n_pos += 1
+
+                if bashful.n_pos == POS_PER_MVMT :
+
+                    bashful.potential_update_of_indexes_and_positions()
+
+                    pos_up = mat_map[(bashful.index_i-1)%HEIGHT][(bashful.index_j)%WIDTH]
+                    pos_right = mat_map[(bashful.index_i)%HEIGHT][(bashful.index_j+1)%WIDTH]
+                    pos_left = mat_map[(bashful.index_i)%HEIGHT][(bashful.index_j-1)%WIDTH]
+                    pos_down = mat_map[(bashful.index_i+1)%HEIGHT][(bashful.index_j)%WIDTH]
+
+
+                    if pos_up<0 :
+                        direction_list.remove("upward")
+
+                    if pos_right<0 :
+                        direction_list.remove("rightward")
+
+                    if pos_left<0 :
+                        direction_list.remove("leftward")
+
+                    if pos_down<0 :
+                        direction_list.remove("downward")
+
+
+                    current_opposite_direction = utilities.opposite_direction(bashful.direction)
+
+                    if utilities.is_in(current_opposite_direction,direction_list):
+                        direction_list.remove(current_opposite_direction)
+
+                    bashful.direction = direction_list[rd.randint(0,len(direction_list)-1)]
+
+                    direction_list = ["rightward","upward","leftward","downward"]
+
+                bashful.config_mvmt(bashful.direction)
+                bashful.move()
+
 
             player.potential_update_of_indexes_and_positions()
 
@@ -410,6 +678,9 @@ def main() :
 
         player.draw(screen)
         shadow.draw(screen)
+        pokey.draw(screen)
+        speedy.draw(screen)
+        bashful.draw(screen)
 
         font=pygame.font.Font(None, 40)
         text = font.render(str(score),1,(255,255,255))
