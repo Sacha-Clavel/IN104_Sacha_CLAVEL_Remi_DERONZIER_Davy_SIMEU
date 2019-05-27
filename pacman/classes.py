@@ -81,6 +81,10 @@ class Character :
             step_i = 1
             step_j = 0
 
+        if direction == "None" :
+            step_i = 0
+            step_j = 0
+
         return(step_i,step_j)
 
 
@@ -163,7 +167,7 @@ class Pacman(Character) :
 
 class Ghost(Character):
 
-    def __init__(self,pos_x,pos_y,index_i,index_j,direction,n_pos,offset_x,offset_y,name,image,choose_next_direction) :
+    def __init__(self,pos_x,pos_y,index_i,index_j,direction,n_pos,offset_x,offset_y,name,image,choose_next_direction,is_eaten) :
         """
             • name : Name of one of the 4 ghosts (shadow, speedy, pookey, bashful)
 
@@ -175,6 +179,7 @@ class Ghost(Character):
         self.name = name
         self.image = image
         self.choose_next_direction = choose_next_direction
+        self.is_eaten = is_eaten
 
 
 

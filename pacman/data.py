@@ -1,1 +1,0 @@
-POS_PER_MVMT = 9

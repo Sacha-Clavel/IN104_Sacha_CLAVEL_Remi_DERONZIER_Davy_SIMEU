@@ -32,8 +32,11 @@ def main() :
 
     black_block_org = pygame.image.load("images/black_block.png")
     image_black_block = pygame.transform.scale(black_block_org,[map.THICK,map.THICK])
+    image_black_background = pygame.transform.scale(black_block_org,[SCREEN_WIDTH,SCREEN_HEIGHT])
     game_over_org = pygame.image.load("images/game_over.png")
-    image_game_over = pygame.transform.scale(game_over_org,[SCREEN_WIDTH,SCREEN_WIDTH])
+    image_game_over = pygame.transform.scale(game_over_org,[550,550])
+    you_win_org = pygame.image.load("images/you_win.png")
+    image_you_win = pygame.transform.scale(you_win_org,[550,508])
 
     # Création des images propres au pacman
     # La matrice images_pacman contient toutes les formes de la tête du pacman possibles (différentes formes de bouche et différentes inclinaisons)
@@ -72,117 +75,130 @@ def main() :
     image_Bashful_org = pygame.image.load("images/Bashful.png")
     image_Bashful = pygame.transform.scale(image_Bashful_org,[GHOSTS_SIZE,GHOSTS_SIZE])
 
+    image_Flee_org = pygame.image.load("images/flee.png")
+    image_Flee = pygame.transform.scale(image_Flee_org,[GHOSTS_SIZE,GHOSTS_SIZE])
+
+
 
     # Création des images des graines
 
     SEED_SIZE = 10
 
-    seed_px = pygame.image.load("Images/seed.png")
-    image_seed = pygame.transform.scale(seed_px,[SEED_SIZE,SEED_SIZE])
+    seed_org = pygame.image.load("Images/seed.png")
+    image_seed = pygame.transform.scale(seed_org,[SEED_SIZE,SEED_SIZE])
+
+    STAR_SIZE = 15
+
+    star_org = pygame.image.load("Images/star.png")
+    image_star = pygame.transform.scale(star_org,[STAR_SIZE,STAR_SIZE])
+
+    # Creation des images des vies
+
+    live_1_org = pygame.image.load("Images/1_live.png")
+    image_live_1 = pygame.transform.scale(live_1_org,[31,25])
+
+    live_2_org = pygame.image.load("Images/2_live.png")
+    image_live_2 = pygame.transform.scale(live_2_org,[66,25])
+
+    live_3_org = pygame.image.load("Images/3_live.png")
+    image_live_3 = pygame.transform.scale(live_3_org,[90,25])
+
+    def characters_initialisation():
+
+        # 1) Initialisation de pacman
+
+        index_j_pacman = 11
+        index_i_pacman = 20
+
+        OFFSET_PACMAN_X = 11
+        OFFSET_PACMAN_Y = 11
+
+        pos_x = map.mat_pos[index_i_pacman][index_j_pacman][0]
+        pos_y = map.mat_pos[index_i_pacman][index_j_pacman][1]
+
+        Player = classes.Pacman(pos_x,pos_y,index_i_pacman,index_j_pacman,"leftward",0,OFFSET_PACMAN_X,OFFSET_PACMAN_Y,images_pacman,0,"None")
+        # pacman(self,pos_x , pos_y , index_i , index_j , direction , n_pos , offset_x , offset_y , images , n_mouth , next_direction_choice)
 
 
 
-    # 1) Initialisation de pacman
+        # 2) Initialisation des fantomes
+        # 2.1) Initialisation de Shadow
 
-    index_j_pacman = 11
-    index_i_pacman = 20
+        index_j_Shadow = 1
+        index_i_Shadow = 1
 
-    OFFSET_PACMAN_X = 11
-    OFFSET_PACMAN_Y = 11
+        OFFSET_GHOSTS_X = 10
+        OFFSET_GHOSTS_Y = 11
 
-    pos_x = map.mat_pos[index_i_pacman][index_j_pacman][0]
-    pos_y = map.mat_pos[index_i_pacman][index_j_pacman][1]
+        pos_x_Shadow = map.mat_pos[index_i_Shadow][index_j_Shadow][0]
+        pos_y_Shadow = map.mat_pos[index_i_Shadow][index_j_Shadow][1]
 
-    Player = classes.Pacman(pos_x,pos_y,index_i_pacman,index_j_pacman,"leftward",0,OFFSET_PACMAN_X,OFFSET_PACMAN_Y,images_pacman,0,"None")
-    # pacman(self,pos_x , pos_y , index_i , index_j , direction , n_pos , offset_x , offset_y , images , n_mouth , next_direction_choice)
-
-
-
-    # 2) Initialisation des fantomes
-    # 2.1) Initialisation de Shadow
-
-    index_j_Shadow = 1
-    index_i_Shadow = 1
-
-    OFFSET_GHOSTS_X = 10
-    OFFSET_GHOSTS_Y = 11
-
-    pos_x_Shadow = map.mat_pos[index_i_Shadow][index_j_Shadow][0]
-    pos_y_Shadow = map.mat_pos[index_i_Shadow][index_j_Shadow][1]
-
-    Shadow = classes.Ghost(pos_x_Shadow,pos_y_Shadow,index_i_Shadow,index_j_Shadow,"downward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Shadow",image_Shadow,functions.choose_next_direction_shadow)
-    #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction)
+        Shadow = classes.Ghost(pos_x_Shadow,pos_y_Shadow,index_i_Shadow,index_j_Shadow,"downward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Shadow",image_Shadow,functions.choose_next_direction_shadow,False)
+        #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction   ,   is_eaten)
 
 
 
-    # 2.2) Initialisation de Speedy
+        # 2.2) Initialisation de Speedy
 
-    index_j_Speedy = 21
-    index_i_Speedy = 1
+        index_j_Speedy = 21
+        index_i_Speedy = 1
 
-    OFFSET_GHOSTS_X = 10
-    OFFSET_GHOSTS_Y = 11
+        OFFSET_GHOSTS_X = 10
+        OFFSET_GHOSTS_Y = 11
 
-    pos_x_Speedy = map.mat_pos[index_i_Speedy][index_j_Speedy][0]
-    pos_y_Speedy = map.mat_pos[index_i_Speedy][index_j_Speedy][1]
+        pos_x_Speedy = map.mat_pos[index_i_Speedy][index_j_Speedy][0]
+        pos_y_Speedy = map.mat_pos[index_i_Speedy][index_j_Speedy][1]
 
-    Speedy = classes.Ghost(pos_x_Speedy,pos_y_Speedy,index_i_Speedy,index_j_Speedy,"leftward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Speedy",image_Speedy,functions.choose_next_direction_speedy)
-    #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction)
-
-
-
-    # 2.3) Initialisation de Bashful
-
-    index_j_Bashful = 1
-    index_i_Bashful = 25
-
-    OFFSET_GHOSTS_X = 10
-    OFFSET_GHOSTS_Y = 11
-
-    pos_x_Bashful = map.mat_pos[index_i_Bashful][index_j_Bashful][0]
-    pos_y_Bashful = map.mat_pos[index_i_Bashful][index_j_Bashful][1]
-
-    Bashful = classes.Ghost(pos_x_Bashful,pos_y_Bashful,index_i_Bashful,index_j_Bashful,"rightward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Bashful",image_Bashful,functions.choose_next_direction_flee)
-    #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction  )
+        Speedy = classes.Ghost(pos_x_Speedy,pos_y_Speedy,index_i_Speedy,index_j_Speedy,"leftward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Speedy",image_Speedy,functions.choose_next_direction_speedy,False)
+        #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction   ,   is_eaten)
 
 
 
-    # 2.4) Initialisation de Pokey
+        # 2.3) Initialisation de Bashful
 
-    index_j_Pokey = 21
-    index_i_Pokey = 25
+        index_j_Bashful = 1
+        index_i_Bashful = 25
 
-    OFFSET_GHOSTS_X = 10
-    OFFSET_GHOSTS_Y = 11
+        OFFSET_GHOSTS_X = 10
+        OFFSET_GHOSTS_Y = 11
 
-    pos_x_Pokey = map.mat_pos[index_i_Pokey][index_j_Pokey][0]
-    pos_y_Pokey = map.mat_pos[index_i_Pokey][index_j_Pokey][1]
+        pos_x_Bashful = map.mat_pos[index_i_Bashful][index_j_Bashful][0]
+        pos_y_Bashful = map.mat_pos[index_i_Bashful][index_j_Bashful][1]
 
-    Pokey = classes.Ghost(pos_x_Pokey,pos_y_Pokey,index_i_Pokey,index_j_Pokey,"upward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Pokey",image_Pokey,functions.choose_next_direction_pokey)
-    #   ghost (  self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction)
+        Bashful = classes.Ghost(pos_x_Bashful,pos_y_Bashful,index_i_Bashful,index_j_Bashful,"rightward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Bashful",image_Bashful,functions.choose_next_direction_bashful,False)
+        #   ghost   (    self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction   ,   is_eaten)
 
+
+
+        # 2.4) Initialisation de Pokey
+
+        index_j_Pokey = 21
+        index_i_Pokey = 25
+
+        OFFSET_GHOSTS_X = 10
+        OFFSET_GHOSTS_Y = 11
+
+        pos_x_Pokey = map.mat_pos[index_i_Pokey][index_j_Pokey][0]
+        pos_y_Pokey = map.mat_pos[index_i_Pokey][index_j_Pokey][1]
+
+        Pokey = classes.Ghost(pos_x_Pokey,pos_y_Pokey,index_i_Pokey,index_j_Pokey,"upward",0,OFFSET_GHOSTS_X,OFFSET_GHOSTS_Y,"Pokey",image_Pokey,functions.choose_next_direction_pokey,False)
+        #   ghost (  self   , pos_x   ,   pos_y   ,   index_i   ,   index_j   ,   direction   ,   n_pos   ,   offset_x   ,   offset_y   ,   name   ,   image   ,   choose_next_direction   ,   is_eaten)
+
+        return(Player,Shadow,Pokey,Speedy,Bashful)
+
+    Player, Shadow, Pokey, Speedy, Bashful = characters_initialisation()
 
 
     # 3) Initialisation des fruits
     # 3.1) Initialisation des graines
 
     Seed = classes.Eatable("seed",image_seed,1,1)
+    Star = classes.Eatable("star",image_star,1,2)
     #  Eatable ( self , name , image , points , mat_map_value )
+    list_of_eatable = [Seed,Star]
 
 
-
-    list_of_eatable = [Seed]
-
-    # Initialisation de la variable qui stocke le score
-
-    score = 0
-
-    # Initialisation des temps
-
-    t0 = t.time()
-    period = 0.00000001
-
-    # Initialisation de l'affichage
+    # Premiers affichages, et intéractions avec l'utilisateur
 
     event_detected = None
     Name = ""
@@ -190,44 +206,80 @@ def main() :
     while event_detected != "return" :
 
         event_detected = functions.get_event()
-        if functions.is_in(event_detected,["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]):
+        if functions.is_in(event_detected,["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ","1","2","3","4","5","6","7","8","9"]):
             Name += event_detected
+
+        if event_detected == "delete" :
+            Name = Name[:-1]
 
         if event_detected == "quit" :
             event_detected = "return"
             running = False
 
-        font=pygame.font.Font(None, 50)
-        text_name = font.render("Nickname : " + Name,1,(255,220,0))
-        screen.blit(text_name, (10,200))
+
+        screen.blit(image_black_background,[0,0])
 
         font=pygame.font.Font(None, 50)
-        text1 = font.render("Please enter your nickname" ,1,(255,220,0))
-        text2 = font.render("and press \"enter\" when",1,(255,220,0))
-        text3 = font.render("you are ready",1,(255,220,0))
-        screen.blit(text1, (60,50))
-        screen.blit(text2, (90, 90))
-        screen.blit(text3, (170, 130))
+        text = font.render("Please enter your nickname" ,1,(255,220,0))
+        screen.blit(text, (60,50))
+        text = font.render("and press \"enter\" when",1,(255,220,0))
+        screen.blit(text, (90, 90))
+        text = font.render("it's done",1,(255,220,0))
+        screen.blit(text, (220, 130))
+
+
+        text_name = font.render("Nickname : " + Name,1,(255,220,0))
+        screen.blit(text_name, (10,230))
 
         pygame.display.flip()
 
-    # font=pygame.font.Font(None, 50)
-    # text_name = font.render("You think you're ready, really ?" + Name,1,(255,220,0))
-    # screen.blit(text_name, (10,200))
-    # pygame.display.flip()
-    #
-    # t1 = t.time()
-    # while abs(t.time()-t1)<2 :
-    #     bla = 0
+    text = font.render("Hi "+Name+" !",1,(255,220,0))
+    screen.blit(text, (200,330))
+
+    text = font.render("Now, please select the speed ",1,(255,220,0))
+    screen.blit(text, (55,370))
+    text = font.render("of the game with your keyboard ! ",1,(255,220,0))
+    screen.blit(text, (30,410))
+
+    text = font.render("1 : Slow ",1,(255,220,0))
+    screen.blit(text, (100,500))
+
+    text = font.render("2 : Medium ",1,(255,220,0))
+    screen.blit(text, (100,560))
+
+    text = font.render("3 : Fast, really fast ! ",1,(255,220,0))
+    screen.blit(text, (100,620))
+
+    pygame.display.flip()
+
+    event_detected = None
+    while not(functions.is_in(event_detected,["1","2","3"])) :
+        event_detected = functions.get_event()
+
+        if event_detected == "1":
+            period = 0.03
+
+        elif event_detected == "2":
+            period = 0.001
+
+        elif event_detected == "3":
+            period = 0.00001
+
+        if event_detected == "quit" :
+            event_detected = "1"
+            running = False
+
 
 
     screen.blit(image_map, [0,0])
+    Seed.draw(screen)
+    Star.draw(screen)
     Player.draw(screen)
     Shadow.draw(screen)
     Pokey.draw(screen)
     Speedy.draw(screen)
     Bashful.draw(screen)
-    Seed.draw(screen)
+
 
     pygame.display.flip()
 
@@ -236,7 +288,7 @@ def main() :
         event_detected = functions.get_event()
 
         font=pygame.font.Font(None, 35)
-        text_name = font.render("Hi " + Name + " ! Please press an arrow key to start",1,(255,220,0))
+        text_name = font.render("Dear " + Name + ", please press an arrow key to start",1,(255,220,0))
         screen.blit(text_name, (30,16))
         pygame.display.flip()
 
@@ -246,7 +298,11 @@ def main() :
 
 
     Player.direction = event_detected
-
+    t0 = t.time()
+    flee_time_init = t.time()
+    ghosts_are_fleeing = False
+    score = 0
+    lives = 3
 
     while running :
 
@@ -265,7 +321,7 @@ def main() :
         if abs(Pokey.n_pos) == map.POS_PER_MVMT :
             Pokey.n_pos = 0
             Pokey.update_of_indexes_and_positions()
-            Pokey.choose_next_direction(Pokey)
+            Pokey.choose_next_direction(Pokey,Player)
         Pokey.move()
 
         Speedy.n_pos += functions.sum(Speedy.steps())
@@ -317,11 +373,36 @@ def main() :
                 if Classe.mat_map_value == map.mat_map[Player.index_i][Player.index_j]:
                     score += Classe.points
 
+                if map.mat_map[Player.index_i][Player.index_j] == 2 :
+
+                    flee_time_init = t.time()
+                    Shadow.image = image_Flee
+                    Pokey.image = image_Flee
+                    Speedy.image = image_Flee
+                    Bashful.image = image_Flee
+                    Shadow.choose_next_direction = functions.choose_next_direction_flee
+                    Pokey.choose_next_direction = functions.choose_next_direction_flee
+                    Speedy.choose_next_direction = functions.choose_next_direction_flee
+                    Bashful.choose_next_direction = functions.choose_next_direction_flee
+                    ghosts_are_fleeing = True
+
             map.mat_map[Player.index_i][Player.index_j] *= 0
+
+        if abs(t.time()-flee_time_init)>10 :
+                Shadow.image = image_Shadow
+                Pokey.image = image_Pokey
+                Speedy.image = image_Speedy
+                Bashful.image = image_Bashful
+                Shadow.choose_next_direction = functions.choose_next_direction_shadow
+                Pokey.choose_next_direction = functions.choose_next_direction_pokey
+                Speedy.choose_next_direction = functions.choose_next_direction_speedy
+                Bashful.choose_next_direction = functions.choose_next_direction_bashful
+                ghosts_are_fleeing = False
 
 
         screen.blit(image_map, [0,0])
         Seed.draw(screen)
+        Star.draw(screen)
 
         font=pygame.font.Font(None, 40)
         text_score = font.render("Score : " + str(score),1,(255,220,0))
@@ -331,6 +412,12 @@ def main() :
         text_time = font.render("Time : " + str(playing_time)+ "s",1,(255,220,0))
         screen.blit(text_time, (420,16))
 
+        if lives == 3 :
+            screen.blit(image_live_3,[260,14])
+        elif lives == 2 :
+            screen.blit(image_live_2,[260,14])
+        elif lives == 1 :
+            screen.blit(image_live_1,[260,14])
 
         Player.draw(screen)
         Shadow.draw(screen)
@@ -356,57 +443,115 @@ def main() :
         delta_bashful = delta_x_bashful + delta_y_bashful
 
         if min(delta_shadow,delta_pokey,delta_speedy,delta_bashful)<=map.STEP:
+            if ghosts_are_fleeing :
+                if delta_shadow <= map.STEP :
+                    Shadow.is_eaten = True
 
+                if delta_speedy <= map.STEP :
+                    Speedy.is_eaten = True
+
+                if delta_pokey <= map.STEP :
+                    Pokey.is_eaten = True
+
+                if delta_bashful <= map.STEP :
+                    Bashful.is_eaten = True
+
+
+            else :
+
+                lives -=1
+
+                while not(functions.is_in(event_detected,["rightward","leftward","upward","downward"])) and lives>0 :
+                    event_detected = functions.get_event()
+
+                    font=pygame.font.Font(None, 35)
+                    text_name = font.render("Haha ! Press an arrow key to continue",1,(255,220,0))
+                    screen.blit(text_name, (90,380))
+                    pygame.display.flip()
+
+                    if event_detected == "quit" :
+                        event_detected = "leftward"
+                        running = False
+
+                Player, Shadow, Pokey, Speedy, Bashful = characters_initialisation()
+                Player.direction = event_detected
+
+        if Shadow.is_eaten :
+            Shadow.index_i = 11
+            Shadow.index_j = 9
+            Shadow.pos_x = map.mat_pos[Shadow.index_i][Shadow.index_j][0]
+            Shadow.pos_y = map.mat_pos[Shadow.index_i][Shadow.index_j][1]
+            Shadow.choose_next_direction = functions.choose_next_direction_eaten
+            Shadow.image = image_Shadow
+            Shadow.direction = "None"
+
+        if Speedy.is_eaten :
+            Speedy.index_i = 12
+            Speedy.index_j = 10
+            Speedy.pos_x = map.mat_pos[Speedy.index_i][Speedy.index_j][0]
+            Speedy.pos_y = map.mat_pos[Speedy.index_i][Speedy.index_j][1]
+            Speedy.choose_next_direction = functions.choose_next_direction_eaten
+            Speedy.image = image_Speedy
+            Speedy.direction = "None"
+
+        if Pokey.is_eaten :
+            Pokey.index_i = 11
+            Pokey.index_j = 12
+            Pokey.pos_x = map.mat_pos[Pokey.index_i][Pokey.index_j][0]
+            Pokey.pos_y = map.mat_pos[Pokey.index_i][Pokey.index_j][1]
+            Pokey.choose_next_direction = functions.choose_next_direction_eaten
+            Pokey.image = image_Pokey
+            Pokey.direction = "None"
+
+        if Bashful.is_eaten :
+            Bashful.index_i = 12
+            Bashful.index_j = 13
+            Bashful.pos_x = map.mat_pos[Bashful.index_i][Bashful.index_j][0]
+            Bashful.pos_y = map.mat_pos[Bashful.index_i][Bashful.index_j][1]
+            Bashful.choose_next_direction = functions.choose_next_direction_eaten
+            Bashful.image = image_Bashful
+            Bashful.direction = "None"
+
+
+        max_map = map.mat_map[0][0]
+
+        for i in range(map.HEIGHT) :
+            for j in range(map.WIDTH) :
+                if map.mat_map[i][j] > max_map :
+                    max_map = map.mat_map[i][j]
+
+
+        if lives <= 0 or max_map==0 :
             running = False
 
-            # t1 = t.time()       # Pour réguler la vitesse d'affichage des blocks
-            # while abs(t.time()-t1)<3:
-    screen.blit(image_game_over,[0,100])
-    pygame.display.flip()
-    event_detected = None
-    while functions.get_event() != "quit":
-        Wait = True
 
-            #pygame.display.flip()
-            # t1 = t.time()       # Pour réguler la vitesse d'affichage des blocks
-            # while abs(t.time()-t1)<3:
-            #     wait = True
-
-
-
-        # if running == False :
-        #
-
-
-            # for i in range(map.HEIGHT) :
-            #     for j in range(map.WIDTH) :
-            #         a=0
-            #         screen.blit(image_black_block,[map.mat_pos[i][j][0],map.mat_pos[i][j][1]])
-            # t1 = t.time()       # Pour réguler la vitesse d'affichage des blocks
-            # while abs(t.time()-t1)<3:
-            #     wait = True
-
-            #pygame.display.flip()
-
-            # t1 = t.time()       # Pour réguler la vitesse d'affichage des blocks
-            # while abs(t.time()-t1)<3:
-            #     wait = True
-            #
-            # screen.blit(image_game_over,[0,100])
-            # pygame.display.flip()
-
-            # while running :
-            #
-            #     event_detected = functions.get_event()
-            #     if event_detected == "quit" :
-            #         running = False
-            # running = False
-
-        # régulation de la vitesse de rafraichissement du jeu
 
         t1 = t.time()
         while abs(t.time()-t1)<period :
             wait = True
+
+
+
+
+    screen.blit(image_black_background,[0,0])
+
+    if max_map >0 :
+        screen.blit(image_game_over,[30,40])
+        font=pygame.font.Font(None, 45)
+        text_name = font.render("... Your final score was "+str(score)+" ...",1,(255,220,0))
+        screen.blit(text_name, (100,580))
+    else :
+        screen.blit(image_you_win,[30,40])
+
+
+    pygame.display.flip()
+
+    event_detected = None
+
+    while functions.get_event() != "quit":
+        Wait = True
+
+
 
 if __name__=="__main__":
     main()

@@ -165,13 +165,52 @@ def get_event():
             elif event.key == pygame.K_RETURN :
                 event_detected = "return"
 
+            elif event.key == pygame.K_DELETE or event.key == pygame.K_BACKSPACE :
+                event_detected = "delete"
+
+            elif  event.key == pygame.K_0 :
+                event_detected = "0"
+
+            elif  event.key == pygame.K_1 :
+                event_detected = "1"
+
+            elif  event.key == pygame.K_2 :
+                event_detected = "2"
+
+            elif  event.key == pygame.K_3 :
+                event_detected = "3"
+
+            elif  event.key == pygame.K_4 :
+                event_detected = "4"
+
+            elif  event.key == pygame.K_5 :
+                event_detected = "5"
+
+            elif  event.key == pygame.K_6 :
+                event_detected = "6"
+
+            elif  event.key == pygame.K_7 :
+                event_detected = "7"
+
+            elif  event.key == pygame.K_8 :
+                event_detected = "8"
+
+            elif  event.key == pygame.K_9 :
+                event_detected = "9"
+
+            elif event.key == pygame.K_SPACE :
+                event_detected = " "
+
+
+
+
 
 
 
         return(event_detected)
 
 
-def choose_next_direction_pokey(Ghost):
+def choose_next_direction_pokey(Ghost,Player):
 
     """
         Pokey est bête, ses déplacements sont complètements aléatoires
@@ -289,6 +328,8 @@ def choose_next_direction_speedy(Ghost,Pacman):
     step_j = classes.directions[direction_prediction]["step_j"]
     predicted_cell_index_i += step_i
     predicted_cell_index_j += step_j
+    predicted_cell_index_i = predicted_cell_index_i%map.HEIGHT
+    predicted_cell_index_j = predicted_cell_index_j%map.WIDTH
 
 
     if len(allowed_directions_prediction)>2 or map.mat_map[predicted_cell_index_i][predicted_cell_index_j] < 0 :
@@ -310,6 +351,8 @@ def choose_next_direction_speedy(Ghost,Pacman):
             step_j = classes.directions[direction_prediction]["step_j"]
             predicted_cell_index_i += step_i
             predicted_cell_index_j += step_j
+            predicted_cell_index_i = predicted_cell_index_i%map.HEIGHT
+            predicted_cell_index_j = predicted_cell_index_j%map.WIDTH
 
             allowed_directions_prediction = allowed_directions_cell(predicted_cell_index_i,predicted_cell_index_j)
 
@@ -345,3 +388,16 @@ def choose_next_direction_speedy(Ghost,Pacman):
                 allowed_directions.remove(current_opposite_direction)
 
             Ghost.direction = allowed_directions[rd.randint(0,len(allowed_directions)-1)] # Par défaut on prend une direction aléatoire
+
+def choose_next_direction_bashful(Ghost,Pacman):
+    delta_x = abs(Pacman.index_j-Ghost.index_j)
+    delta_y = abs(Pacman.index_i-Ghost.index_i)
+    delta = delta_x + delta_y
+
+    if delta <= 10 :
+        choose_next_direction_shadow(Ghost,Pacman)
+    else :
+        choose_next_direction_pokey(Ghost,Pacman)
+
+def choose_next_direction_eaten(Ghost,Player):
+    return("None")
