@@ -201,16 +201,16 @@ def main() :
     # Premiers affichages, et intéractions avec l'utilisateur
 
     event_detected = None
-    Name = ""
+    name = ""
 
     while event_detected != "return" :
 
         event_detected = functions.get_event()
         if functions.is_in(event_detected,["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ","1","2","3","4","5","6","7","8","9"]):
-            Name += event_detected
+            name += event_detected
 
         if event_detected == "delete" :
-            Name = Name[:-1]
+            name = name[:-1]
 
         if event_detected == "quit" :
             event_detected = "return"
@@ -228,12 +228,12 @@ def main() :
         screen.blit(text, (220, 130))
 
 
-        text_name = font.render("Nickname : " + Name,1,(255,220,0))
+        text_name = font.render("Nickname : " + name,1,(255,220,0))
         screen.blit(text_name, (10,230))
 
         pygame.display.flip()
 
-    text = font.render("Hi "+Name+" !",1,(255,220,0))
+    text = font.render("Hi "+name+" !",1,(255,220,0))
     screen.blit(text, (200,330))
 
     text = font.render("Now, please select the speed ",1,(255,220,0))
@@ -288,7 +288,7 @@ def main() :
         event_detected = functions.get_event()
 
         font=pygame.font.Font(None, 35)
-        text_name = font.render("Dear " + Name + ", please press an arrow key to start",1,(255,220,0))
+        text_name = font.render("Dear " + name + ", please press an arrow key to start",1,(255,220,0))
         screen.blit(text_name, (30,16))
         pygame.display.flip()
 
@@ -538,10 +538,49 @@ def main() :
     if max_map >0 :
         screen.blit(image_game_over,[30,40])
         font=pygame.font.Font(None, 45)
-        text_name = font.render("... Your final score was "+str(score)+" ...",1,(255,220,0))
-        screen.blit(text_name, (100,580))
+        text = font.render("... Your final score was "+str(score)+" ...",1,(255,220,0))
+        screen.blit(text, (100,500))
+
+        file = open("scores.txt","r")
+        content = file.read()
+        mat_scores = []
+        line_scores = content.split("\n")
+        for line in line_scores :
+            mat_scores.append(line.split(" "))
+
+        mat_scores = mat_scores[:-1]
+
+        name_highscore = mat_scores[0][0]
+        score_max = int(mat_scores[0][1])
+        for line in mat_scores :
+            if int(line[1])>score_max:
+                score_max = int(line[1])
+                name_highscore = line[0]
+        file.close()
+
+        if score>=score_max:
+            text = font.render("You beat the highscore !",1,(255,220,0))
+            screen.blit(text, (130,580))
+            text = font.render("... But you're still a loser ...",1,(255,220,0))
+            screen.blit(text, (120,620))
+
+        else :
+            text = font.render("The champion is still " + name_highscore + ",",1,(255,220,0))
+            screen.blit(text, (90,580))
+            text = font.render("he reached " + str(score_max) + " points !",1,(255,220,0))
+            screen.blit(text, (140,620))
+            text = font.render("... Loser ...",1,(255,220,0))
+            screen.blit(text, (220,660))
+
+
+
     else :
         screen.blit(image_you_win,[30,40])
+
+    file = open("scores.txt","a")
+    file.write(name+" "+str(score)+"\n")
+    file.close()
+
 
 
     pygame.display.flip()

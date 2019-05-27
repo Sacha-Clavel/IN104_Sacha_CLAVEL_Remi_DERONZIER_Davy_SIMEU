@@ -394,7 +394,7 @@ def choose_next_direction_bashful(Ghost,Pacman):
     delta_y = abs(Pacman.index_i-Ghost.index_i)
     delta = delta_x + delta_y
 
-    if delta <= 10 :
+    if delta <= 6 :
         choose_next_direction_shadow(Ghost,Pacman)
     else :
         choose_next_direction_pokey(Ghost,Pacman)
