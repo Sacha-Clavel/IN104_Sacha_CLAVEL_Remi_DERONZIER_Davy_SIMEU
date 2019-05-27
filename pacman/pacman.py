@@ -442,7 +442,7 @@ def main() :
         delta_y_bashful = abs(Player.pos_y-Bashful.pos_y)
         delta_bashful = delta_x_bashful + delta_y_bashful
 
-        if min(delta_shadow,delta_pokey,delta_speedy,delta_bashful)<=map.STEP:
+        if min(delta_shadow,delta_pokey,delta_speedy,delta_bashful)<=5*map.STEP:
             if ghosts_are_fleeing :
                 if delta_shadow <= map.STEP :
                     Shadow.is_eaten = True
@@ -546,7 +546,7 @@ def main() :
         mat_scores = []
         line_scores = content.split("\n")
         for line in line_scores :
-            mat_scores.append(line.split(" "))
+            mat_scores.append(line.split("-"))
 
         mat_scores = mat_scores[:-1]
 
@@ -578,7 +578,7 @@ def main() :
         screen.blit(image_you_win,[30,40])
 
     file = open("scores.txt","a")
-    file.write(name+" "+str(score)+"\n")
+    file.write(name+"-"+str(score)+"\n")
     file.close()
 
 
